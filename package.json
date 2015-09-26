@@ -39,7 +39,10 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "base32.js": "^0.1.0",
     "react": "^0.13.0",
+    "stellar-base": "^0.4.2",
+    "stellar-sdk": "^0.2.3",
     "webpack-s3-plugin": "^0.4.11"
   }
 }
