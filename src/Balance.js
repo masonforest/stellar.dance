@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
 import {
     Account,
@@ -6,43 +7,136 @@ import {
     Operation,
     TransactionBuilder
     } from 'stellar-base';
+import {Server} from 'stellar-sdk';
 import base32 from 'base32.js';
+var defaultDestination = "GDZCATWIBACVBOVZJKKLQXP64UTPP3QFOCKX42RNCVPLXYVVQKDXW2UM";
+var server = new Server({hostname:'horizon-testnet.stellar.org', secure:true, port:443});
 
 export default class Balance extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    if (!localStorage.seed) {
+      localStorage.seed = this.randomSeed();
+    }
+
+    this.state = {
+      seed: localStorage.seed,
+      balance: 0,
+      addresses: [],
+      destinationAddress: defaultDestination
+    }
   }
 
-  render() {
-    var destinationKeyPair = Keypair.random();
-    var sourceKeyPair = Keypair.random();
-    var source = new Account("GAC3ZK463UY2XO2IXZQMJGYMS3JKZ33LX7J7YEWD436JLKE4QVPPGO5G", 0);
-    var destination = "GD2ZZE7FGCTNIR4L63TGQ37BMQO3QMAAG7QKBXOON73CA2PHBYL5UCSV"//destinationKeyPair.address();
-    // console.log(destinationKeyPair.address())
-    var amount = "1000";
-    var asset = Asset.native();
+  componentDidMount() {
+    let source = Keypair.fromSeed(this.state.seed);
+    server.accounts()
+      .address(source.address())
+      .call()
+      .then((account) => {
+        this.setState({
+          "balance": account.balances[0].balance,
+          "sequence": account.sequence
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+      })
 
-    var transaction = new TransactionBuilder(source)
+    server.accounts()
+      .order("desc")
+      .call()
+      .then((accounts) => {
+        let addresses = accounts.records.map((account) => account.address)
+        this.setState({
+          "addresses": addresses
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+      })
+  }
+
+  fundAccount() {
+    let source = Keypair.fromSeed(this.state.seed);
+    server.friendbot(source.address())
+      .call()
+      .then((result) => setTimeout(function(){location.reload()}, 4000))
+      .catch((err) => console.log(err))
+  }
+  randomSeed() {
+    return Keypair.random().seed();
+  }
+
+  createAddress(){
+    localStorage.seed = this.randomSeed();
+    this.setState({
+      seed: localStorage.seed,
+      balance: "0"
+    })
+  }
+
+  setDestination(e){
+    e.preventDefault()
+    this.setState({"destinationAddress": e.target.getAttribute("data-value")})
+  }
+  pay(e) {
+    e.preventDefault()
+    let sourceKeyPair = Keypair.fromSeed(this.state.seed);
+    let source = new Account(sourceKeyPair.address(), this.state.sequence);
+    let address = React.findDOMNode(this.refs.address).value.trim()
+    let amount = parseInt(React.findDOMNode(this.refs.amount).value.trim())*10000000
+    console.log(amount)
+    let destinationKeyPair = Keypair.random();
+    let destination = address;
+    let asset = Asset.native();
+    let signer = Keypair.master();
+
+    let transaction = new TransactionBuilder(
+      source
+      )
       .addOperation(Operation.payment({
+        source: source.address,
         destination: destination,
         asset: asset,
         amount: amount
       }))
+    .addSigner(sourceKeyPair)
     .build();
-    console.log(transaction)
+    let base64 = btoa(String.fromCharCode.apply(null,transaction.toEnvelope().toXDR()))
+    console.log(base64)
+    $.ajax({
+      url: "https://horizon-testnet.stellar.org/transactions?tx="+encodeURIComponent(base64),
+      method: "POST",
+      success: function(data) {setTimeout(function(){location.reload()}, 5000)},
+      error: function(data) {console.log(data)}
+    })
+  }
+
+  handleDestinationAddressChange(event) {
+    this.setState({message: event.target.value});
+  }
+  render() {
+    let sourceKeyPair = Keypair.fromSeed(this.state.seed);
+    let source = new Account(sourceKeyPair.address(), 1);
+
     return (
       <div>
-      <h1>Your Address</h1>
-      <p>{source.address}</p>
-      <button>Regenerate</button>
-      <h1>Pay to</h1>
-      <form onSubmit={this.pay}>
-        <label>Address:</label><input defaultValue={destination} /><br />
-        <label>Amount:</label><input /><br />
-        <button>Pay</button>
-      </form>
       <h1>Balance</h1>
-      <p>0</p>
+      <p>{parseFloat(this.state.balance).toFixed(2)}</p>
+      <button onClick={this.fundAccount.bind(this)}>Fund Account with Friendbot</button>
+      <h1>Pay to</h1>
+      <form>
+        <label>Address:</label><input type="text" ref="address" value={this.state.destinationAddress} onChange={this.handleDestinationAddressChange.bind(this)} /><br />
+        <label>Amount:</label><input type="text" ref="amount" defaultValue="1" /><br />
+        <button onClick={this.pay.bind(this)}>Pay</button>
+      </form>
+      <h1>Recently Created Addresses</h1>
+      <div>
+        {this.state.addresses.map((address) => {
+          return <div key={address}><button onClick={this.setDestination.bind(this)} data-value={address}>Pay</button> {address}</div>;
+        })}
+      </div>
       </div>
     );
   }

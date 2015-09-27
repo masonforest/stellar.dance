@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "base32.js": "^0.1.0",
+    "jquery": "^2.1.4",
     "react": "^0.13.0",
     "stellar-base": "^0.4.2",
     "stellar-sdk": "^0.2.3",

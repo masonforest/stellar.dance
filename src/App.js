@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RecentTransactions from './RecentTransactions';
 import Identicon from "./Identicon";
 import Balance from "./Balance";
+import Address from "./Address";
 
 export default class App extends React.Component {
   constructor() {
@@ -11,6 +12,7 @@ export default class App extends React.Component {
   render() {
     return(
       <div>
+        <Address title="Your Address"/>
         <Balance/>
       </div>
   );
