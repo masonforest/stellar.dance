@@ -9,6 +9,8 @@ import {
     } from 'stellar-base';
 import {Server} from 'stellar-sdk';
 import base32 from 'base32.js';
+import Actions from '../actions/Actions.js'
+
 var defaultDestination = "GDZCATWIBACVBOVZJKKLQXP64UTPP3QFOCKX42RNCVPLXYVVQKDXW2UM";
 var server = new Server({hostname:'horizon-testnet.stellar.org', secure:true, port:443});
 
@@ -46,11 +48,12 @@ export default class Address extends React.Component {
   }
 
   createAddress(){
-    localStorage.seed = this.randomSeed();
-    this.setState({
-      seed: localStorage.seed,
-      balance: "0"
-    })
+    Actions.createAddress();
+    // localStorage.seed = this.randomSeed();
+    // this.setState({
+    //   seed: localStorage.seed,
+    //   balance: "0"
+    // })
   }
 
 

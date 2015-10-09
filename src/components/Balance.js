@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import React, { Component } from 'react';
+import Actions from '../actions/Actions.js'
 import {
     Account,
     Asset,
