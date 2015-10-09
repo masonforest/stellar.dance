@@ -48,12 +48,12 @@ export default class Address extends React.Component {
   }
 
   createAddress(){
-    Actions.createAddress();
-    // localStorage.seed = this.randomSeed();
-    // this.setState({
-    //   seed: localStorage.seed,
-    //   balance: "0"
-    // })
+    // Actions.createAddress();
+    localStorage.seed = this.randomSeed();
+    this.setState({
+      seed: localStorage.seed,
+      balance: "0"
+    })
   }
 
 
