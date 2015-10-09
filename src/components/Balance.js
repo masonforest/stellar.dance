@@ -86,7 +86,7 @@ export default class Balance extends React.Component {
     let sourceKeyPair = Keypair.fromSeed(this.state.seed);
     let source = new Account(sourceKeyPair.address(), this.state.sequence);
     let address = React.findDOMNode(this.refs.address).value.trim()
-    let amount = parseInt(React.findDOMNode(this.refs.amount).value.trim())*10000000
+    let amount = React.findDOMNode(this.refs.amount).value.trim()
     console.log(amount)
     let destinationKeyPair = Keypair.random();
     let destination = address;
