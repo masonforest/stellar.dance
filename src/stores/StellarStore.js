@@ -19,16 +19,10 @@ class StellarStore {
 
   }
 
-  onFundAccount() {
-    let source = Keypair.fromSeed(localStorage.seed);
-    stellar.friendbot(source.address())
-      .call()
-      .then((result) => setTimeout(function(){location.reload()}, 4000))
-      .catch((err) => console.log(err))
-  }
-
   onCreateAddress() {
-    localStorage.seed = this.randomSeed();
+    if(localStorage.seed){
+      // localStorage.seed = this.randomSeed();
+    }
 
     this.setState({
       seed: localStorage.seed

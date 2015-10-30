@@ -20,7 +20,6 @@ var server = new Server({hostname:'horizon-testnet.stellar.org', secure:true, po
 export default class Address extends React.Component {
   constructor(props) {
     super(props);
-    StellarActions.createAddress();
   }
 
   static getStores() {

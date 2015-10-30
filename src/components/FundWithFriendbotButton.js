@@ -38,7 +38,8 @@ export default class Address extends React.Component {
   }
 
   fundAccount(){
-    StellarActions.fundAccount();
+    let address = Keypair.fromSeed(this.props.seed).address();
+    StellarActions.fundAccount(address);
   }
 
   render() {

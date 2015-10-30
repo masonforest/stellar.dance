@@ -18,7 +18,7 @@ export default class Balance extends React.Component {
     super(props);
 
     if (!localStorage.seed) {
-      localStorage.seed = this.randomSeed();
+      // localStorage.seed = this.randomSeed();
     }
 
     this.state = {
@@ -70,7 +70,7 @@ export default class Balance extends React.Component {
   }
 
   createAddress(){
-    localStorage.seed = this.randomSeed();
+    //localStorage.seed = this.randomSeed();
     this.setState({
       seed: localStorage.seed,
       balance: "0"

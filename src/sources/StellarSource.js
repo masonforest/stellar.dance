@@ -5,4 +5,8 @@ export default class StellarSource {
   static fetchAccounts(){
     return stellar.accounts().order("desc").call()
   }
+
+  static fundAccount(address){
+    return stellar.friendbot(address).call()
+  }
 }

@@ -6,8 +6,10 @@ class StellarActions {
     this.generateActions(
       "createAddress",
       "updateAccounts",
-      "fundAccount"
     );
+  }
+  fundAccount(address) {
+    StellarSource.fundAccount(address)
   }
   fetchAccounts() {
     StellarSource
