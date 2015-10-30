@@ -537,6 +537,26 @@ describe("server.js tests", function () {
       });
     });
 
+    describe("PathsCallBuilder", function() {
+      let pathsResponse = {};
+
+    it("requests the correct endpoint", function (done) {
+      this.axiosMock.expects('get')
+        .withArgs(sinon.match('https://horizon-live.stellar.org:1337/paths?destination_account=GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V&source_account=GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN&destination_amount=20'))
+        .returns(Promise.resolve({data: pathsResponse}));
+
+      this.server.paths("GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP","GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V", new StellarSdk.Asset('EUR', 'GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'), '20.0')
+        .call()
+        .then(function (response) {
+          expect(response).to.be.deep.equal(pathsResponse);
+          done();
+        })
+      .catch(function (err) {
+        done(err);
+      })
+    });
+  });
+
     describe("EffectCallBuilder", function() {
       let effectsResponse = {
         "_embedded": {
