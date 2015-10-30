@@ -47,7 +47,9 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "alt": "^0.17.4",
     "base32.js": "^0.1.0",
+    "clipboard": "^1.4.2",
     "flux": "^2.1.1",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",

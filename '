@@ -4,7 +4,7 @@ import StellarActions from '../actions/StellarActions.js'
 import connectToStores from 'alt/utils/connectToStores';
 
 @connectToStores
-class RecentTransactions extends React.Component {
+export default class RecentTransactions extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -22,18 +22,19 @@ class RecentTransactions extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <h1>Recently Created Addresses</h1>
+    if(!this.props.addresses){
+      return (<div>Loading</div>);
+    } else {
+      return (
         <div>
-          {this.props.addresses.map((address) => {
-            return <div key={address}>{address}</div>;
-          })}
+          <h1>Recently Created Addresses</h1>
+          <div>
+            {this.props.addresses.map((address) => {
+              return <div key={address}>{address}</div>;
+            })}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
-
-RecentTransactions.defaultProps = {addresses: []}
-export default RecentTransactions

@@ -3,6 +3,7 @@ import RecentTransactions from './RecentTransactions';
 import Identicon from "./Identicon";
 import Balance from "./Balance";
 import Address from "./Address";
+import FundWithFriendbotButton from "./FundWithFriendbotButton";
 
 export default class App extends React.Component {
   constructor() {
@@ -12,8 +13,10 @@ export default class App extends React.Component {
   render() {
     return(
       <div>
-        <Address title="Your Address"/>
-        <Balance/>
+        <Address title="Your Address" />
+        <FundWithFriendbotButton title="Fund Account With Friendbot"/>
+        <Balance />
+        <RecentTransactions />
       </div>
   );
   }

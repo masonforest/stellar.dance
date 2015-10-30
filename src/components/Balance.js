@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import React, { Component } from 'react';
-import Actions from '../actions/Actions.js'
+import StellarActions from '../actions/StellarActions.js'
 import {
     Account,
     Asset,
@@ -128,16 +128,10 @@ export default class Balance extends React.Component {
       <button onClick={this.fundAccount.bind(this)}>Fund Account with Friendbot</button>
       <h1>Pay to</h1>
       <form>
-        <label>Address:</label><input type="text" ref="address" value={this.state.destinationAddress} onChange={this.handleDestinationAddressChange.bind(this)} /><br />
+        <label>Address:</label><input type="text" ref="address" defaultValue={this.state.destinationAddress} /><br />
         <label>Amount:</label><input type="text" ref="amount" defaultValue="1" /><br />
         <button onClick={this.pay.bind(this)}>Pay</button>
       </form>
-      <h1>Recently Created Addresses</h1>
-      <div>
-        {this.state.addresses.map((address) => {
-          return <div key={address}><button onClick={this.setDestination.bind(this)} data-value={address}>Pay</button> {address}</div>;
-        })}
-      </div>
       </div>
     );
   }
